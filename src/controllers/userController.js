@@ -26,9 +26,8 @@ export const createUser=async(req,res)=>{
                 message:`Already registered Please Login`
             })
         }
-        const user =await new userModel({
-            email,
-            password
+        const user = await new userModel({
+            email,password
         }).save();
         res.status(201).send({
             success:true,

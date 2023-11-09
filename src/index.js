@@ -1,28 +1,38 @@
-import express  from "express";
+import express from "express";
 import morgan from "morgan";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import dotenv from "dotenv"
 
-import userRoutes from './routes/userRoutes.js'
-const app=express();
+const app=express()
+app.use(express.json());
+app.use(morgan('dev'))
+dotenv.config()
 
-
-// --------DataBase---------------
-const db=async()=>{
+//! Database -------------------------
+const db= async()=>{
     try {
-        await mongoose.connect("mongodb+srv://wishall:vishal@atlascluster.p9u9uvd.mongodb.net/vinay-DB?retryWrites=true&w=majority")
-        console.log("db connected")
+        await mongoose.connect(process.env.CLUSTER)
+        console.log(`db is connected`);
     } catch (error) {
-        console.log("Error in MongoDb" + error)
+        console.log(`Error in mongodb${error}`);
     }
 }
 db();
 
+//!Importing Routes---------------------
+import userRoutes from "./routes/userRoutes.js"
 
+
+//!Routes--------------------------------
 app.use('/api/v1/user',userRoutes)
 
-// ------Server-------
 
-const server=app.listen(8000,()=>{
-    console.log(`Server is running at 8000`)
+
+//!Server---------------------------------
+
+const server =app.listen(process.env.PORT,()=>{
+    console.log(`Server is running at ${process.env.PORT}`);
 })
+
+
 
